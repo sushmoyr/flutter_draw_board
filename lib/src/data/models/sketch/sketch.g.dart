@@ -18,6 +18,6 @@ _$_Sketch _$$_SketchFromJson(Map<String, dynamic> json) => _$_Sketch(
 
 Map<String, dynamic> _$$_SketchToJson(_$_Sketch instance) => <String, dynamic>{
       'name': instance.name,
-      'points': instance.points,
-      'attributes': instance.attributes,
+      'points': instance.points.map((e) => e.toJson()).toList(),
+      'attributes': instance.attributes.toJson(),
     };
