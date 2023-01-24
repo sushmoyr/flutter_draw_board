@@ -165,14 +165,15 @@ class __$$_BoardCopyWithImpl<$Res> extends _$BoardCopyWithImpl<$Res, _$_Board>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Board implements _Board {
+class _$_Board extends _Board {
   const _$_Board(
       {required this.width,
       required this.height,
       final List<Sketch> sketches = const [],
       final String? $type})
       : _sketches = sketches,
-        $type = $type ?? 'default';
+        $type = $type ?? 'default',
+        super._();
 
   factory _$_Board.fromJson(Map<String, dynamic> json) =>
       _$$_BoardFromJson(json);
@@ -296,11 +297,12 @@ class _$_Board implements _Board {
   }
 }
 
-abstract class _Board implements Board {
+abstract class _Board extends Board {
   const factory _Board(
       {required final double width,
       required final double height,
       final List<Sketch> sketches}) = _$_Board;
+  const _Board._() : super._();
 
   factory _Board.fromJson(Map<String, dynamic> json) = _$_Board.fromJson;
 
@@ -360,14 +362,15 @@ class __$$_InitialBoardCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_InitialBoard implements _InitialBoard {
+class _$_InitialBoard extends _InitialBoard {
   const _$_InitialBoard(
-      {this.width = 200.0,
-      this.height = 200.0,
+      {this.width = 8.5,
+      this.height = 11,
       final List<Sketch> sketches = const [],
       final String? $type})
       : _sketches = sketches,
-        $type = $type ?? 'create';
+        $type = $type ?? 'create',
+        super._();
 
   factory _$_InitialBoard.fromJson(Map<String, dynamic> json) =>
       _$$_InitialBoardFromJson(json);
@@ -493,11 +496,12 @@ class _$_InitialBoard implements _InitialBoard {
   }
 }
 
-abstract class _InitialBoard implements Board {
+abstract class _InitialBoard extends Board {
   const factory _InitialBoard(
       {final double width,
       final double height,
       final List<Sketch> sketches}) = _$_InitialBoard;
+  const _InitialBoard._() : super._();
 
   factory _InitialBoard.fromJson(Map<String, dynamic> json) =
       _$_InitialBoard.fromJson;

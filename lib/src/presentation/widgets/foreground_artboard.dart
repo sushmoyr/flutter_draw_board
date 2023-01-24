@@ -10,22 +10,25 @@ class _ForegroundArtboard extends ConsumerWidget {
     final state = ref.watch(boardControllerProvider);
     final controller = ref.read(boardControllerProvider.notifier);
 
-    return Listener(
-      onPointerDown: controller.onPointerDown,
-      onPointerUp: controller.onPointerUp,
-      onPointerMove: controller.onPointerUpdate,
-      child: GestureDetector(
-        onScaleStart: controller.onScaleStart,
-        onScaleUpdate: controller.onScaleUpdate,
-        onScaleEnd: controller.onScaleEnd,
-        child: CustomPaint(
-          painter: ForegroundPainter(
-            sketch: state.activeSketch,
-            scale: state.scale,
-            translation: state.translation,
-            // painters: state.painters,
+    return AspectRatio(
+      aspectRatio: controller.board.ratio,
+      child: Listener(
+        onPointerDown: controller.onPointerDown,
+        onPointerUp: controller.onPointerUp,
+        onPointerMove: controller.onPointerUpdate,
+        child: GestureDetector(
+          onScaleStart: controller.onScaleStart,
+          onScaleUpdate: controller.onScaleUpdate,
+          onScaleEnd: controller.onScaleEnd,
+          child: CustomPaint(
+            painter: ForegroundPainter(
+              sketch: state.activeSketch,
+              scale: state.scale,
+              translation: state.translation,
+              // painters: state.painters,
+            ),
+            // size: controller.board.size,
           ),
-          child: const SizedBox.expand(),
         ),
       ),
     );
@@ -47,12 +50,14 @@ class ForegroundPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print("Canvas:");
-    print("Translation: $translation");
-    print("Scale: $scale");
+    // print("Canvas:");
+    // print("Translation: $translation");
+    // print("Scale: $scale");
     canvas.save();
     canvas.translate(translation.dx, translation.dy);
     canvas.scale(scale);
+    // Rect rect = Rect.fromLTRB(0, 0, size.width, size.height);
+    // canvas.clipRect(rect);
     if (sketch != null) {
       final Map<String, SketchPainter> sketchPainters =
           SketchFactory.overrideDefaults(painters);

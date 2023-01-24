@@ -57,10 +57,24 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class DrawingToolbar extends StatelessWidget {
+class DrawingToolbar extends StatefulWidget {
   const DrawingToolbar({Key? key, required this.controller}) : super(key: key);
 
   final BoardController controller;
+
+  @override
+  State<DrawingToolbar> createState() => _DrawingToolbarState();
+}
+
+class _DrawingToolbarState extends State<DrawingToolbar> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.controller.addListener((state) {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +84,8 @@ class DrawingToolbar extends StatelessWidget {
         double maxWidth = constraints.maxWidth;
         double maxButton = 5.0;
         double tabWidth = maxWidth / maxButton;
+        Color active = Theme.of(context).primaryColor;
+        Color inactive = Theme.of(context).disabledColor;
         return Row(
           children: [
             SizedBox(
@@ -77,9 +93,12 @@ class DrawingToolbar extends StatelessWidget {
               child: Center(
                 child: IconButton(
                   onPressed: () {
-                    controller.selectSketch('scribble');
+                    widget.controller.selectSketch('scribble');
                   },
                   icon: const Icon(Icons.draw_outlined),
+                  color: widget.controller.isSketchActive('scribble')
+                      ? active
+                      : inactive,
                 ),
               ),
             ),
@@ -88,9 +107,12 @@ class DrawingToolbar extends StatelessWidget {
               child: Center(
                 child: IconButton(
                   onPressed: () {
-                    controller.selectSketch('rectangle');
+                    widget.controller.selectSketch('rectangle');
                   },
                   icon: const Icon(Icons.rectangle_outlined),
+                  color: widget.controller.isSketchActive('rectangle')
+                      ? active
+                      : inactive,
                 ),
               ),
             ),
@@ -99,9 +121,12 @@ class DrawingToolbar extends StatelessWidget {
               child: Center(
                 child: IconButton(
                   onPressed: () {
-                    controller.selectSketch('eraser');
+                    widget.controller.selectSketch('eraser');
                   },
                   icon: const Icon(Icons.remove_circle_outline),
+                  color: widget.controller.isSketchActive('eraser')
+                      ? active
+                      : inactive,
                 ),
               ),
             ),
@@ -110,9 +135,10 @@ class DrawingToolbar extends StatelessWidget {
               child: Center(
                 child: IconButton(
                   onPressed: () {
-                    controller.selectMoveMode();
+                    widget.controller.selectMoveMode();
                   },
                   icon: const Icon(Icons.pan_tool),
+                  color: widget.controller.isMoving ? active : inactive,
                 ),
               ),
             ),
@@ -130,7 +156,7 @@ class DrawingToolbar extends StatelessWidget {
                         ),
                       ),
                     );
-                    controller.setAttribute(color: color);
+                    widget.controller.setAttribute(color: color);
                   },
                   icon: const Icon(Icons.draw_outlined),
                 ),

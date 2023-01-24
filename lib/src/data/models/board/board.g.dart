@@ -25,8 +25,8 @@ Map<String, dynamic> _$$_BoardToJson(_$_Board instance) => <String, dynamic>{
 
 _$_InitialBoard _$$_InitialBoardFromJson(Map<String, dynamic> json) =>
     _$_InitialBoard(
-      width: (json['width'] as num?)?.toDouble() ?? 200.0,
-      height: (json['height'] as num?)?.toDouble() ?? 200.0,
+      width: (json['width'] as num?)?.toDouble() ?? 8.5,
+      height: (json['height'] as num?)?.toDouble() ?? 11,
       sketches: (json['sketches'] as List<dynamic>?)
               ?.map((e) => Sketch.fromJson(e as Map<String, dynamic>))
               .toList() ??

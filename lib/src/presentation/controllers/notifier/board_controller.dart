@@ -16,8 +16,8 @@ class BoardController extends StateNotifier<DrawBoardState> {
   }) : super(
           DrawBoardState.drawing(
             board: Board.create(
-              width: boardWidth ?? 200.0,
-              height: boardHeight ?? 200.0,
+              width: boardWidth ?? 8.5,
+              height: boardHeight ?? 11,
             ),
             scale: initialScale,
           ),
@@ -30,6 +30,8 @@ class BoardController extends StateNotifier<DrawBoardState> {
 
   /// Used when the user touches the screen or clicks the mouse
   void onPointerDown(PointerDownEvent event) {
+    // if (!_isPointInBound(event.localPosition)) return;
+
     /// If current state is set to drawing, set active sketch to a new empty
     /// sketch
     state = state.map(
@@ -44,6 +46,7 @@ class BoardController extends StateNotifier<DrawBoardState> {
   /// Used when the user moves the finger across the screen or moves the mouse
   /// pointer
   void onPointerUpdate(PointerMoveEvent event) {
+    // if (!_isPointInBound(event.localPosition)) return;
     if (state is Drawing && state.activeSketch != null) {
       Offset position = (event.localPosition - state.translation) / state.scale;
       Point point = position.asPoint;
@@ -76,6 +79,7 @@ class BoardController extends StateNotifier<DrawBoardState> {
   void onPointerUp(PointerUpEvent event) {
     state = state.map(
       drawing: (d) {
+        if (state.activeSketch == null) return state;
         Board activeBoard = state.board;
         activeBoard = activeBoard.copyWith(
           sketches: [...activeBoard.sketches, state.activeSketch!],
@@ -87,7 +91,7 @@ class BoardController extends StateNotifier<DrawBoardState> {
   }
 
   void onScaleStart(ScaleStartDetails details) {
-    print("Scale start: $details");
+    // print("Scale start: $details");
     if (state is! Moving || details.pointerCount < 2) return;
     state = (state as Moving).copyWith(focalPoint: details.localFocalPoint);
   }
@@ -200,6 +204,17 @@ class BoardController extends StateNotifier<DrawBoardState> {
     );
   }
 
+  // bool _isPointInBound(Offset offset) {
+  //   Size canvasSize = state.board.size;
+  //   if (offset.dx < 0 || offset.dx > canvasSize.width) {
+  //     return false;
+  //   }
+  //   if (offset.dy < 0 || offset.dy > canvasSize.height) {
+  //     return false;
+  //   }
+  //   return true;
+  // }
+
   /// Gets the board data object
   Board get data => state.board;
 
@@ -213,4 +228,18 @@ class BoardController extends StateNotifier<DrawBoardState> {
       attributes: state.selectedAttributes,
     );
   }
+
+  bool isSketchActive(String name) {
+    return state.map<bool>(
+      drawing: (Drawing value) => value.selectedSketch == name,
+      moving: (Moving value) => false,
+    );
+  }
+
+  bool get isMoving => state is Moving;
+  bool get isDrawing => state is Drawing;
+
+  Board get board => state.board;
+
+  void setScale(double scale) => state = state.copyWith(scale: scale);
 }

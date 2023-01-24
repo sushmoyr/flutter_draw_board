@@ -12,7 +12,7 @@ class _BackgroundArtboard extends ConsumerWidget {
 
     return CustomPaint(
       painter: ArtBoardPainter(state),
-      child: const SizedBox.expand(),
+      // size: controller.board.size,
     );
   }
 }
@@ -26,12 +26,16 @@ class ArtBoardPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Offset translation = state.translation;
     double scale = state.scale;
-    print("Canvas:");
-    print("Translation: $translation");
-    print("Scale: $scale");
+    // print("Canvas:");
+    // print("Translation: $translation");
+    // print("Scale: $scale");
     canvas.save();
     canvas.translate(translation.dx, translation.dy);
     canvas.scale(scale);
+    // Rect rect = Rect.fromLTRB(0, 0, size.width, size.height);
+    // canvas.clipRect(rect);
+    Paint paint = Paint()..color = Colors.white;
+    canvas.drawPaint(paint);
     final sketches = state.board.sketches;
     final Map<String, SketchPainter> sketchPainters =
         SketchFactory.overrideDefaults(state.painters);

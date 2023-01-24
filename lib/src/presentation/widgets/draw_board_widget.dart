@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_draw_board/flutter_draw_board.dart';
 import 'package:flutter_draw_board/src/utils/default_painter.dart';
+import 'package:flutter_draw_board/src/utils/inch_to_dpi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 part 'background_artboard.dart';
@@ -36,17 +39,21 @@ class _DrawBoardWidget extends ConsumerStatefulWidget {
 }
 
 class __DrawBoardWidgetState extends ConsumerState<_DrawBoardWidget> {
+  late final controller = ref.read(boardControllerProvider.notifier);
+
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: SizedBox.expand(
-        child: Stack(
-          children: const [
-            _BackgroundArtboard(),
-            _ForegroundArtboard(),
-          ],
-        ),
-      ),
+    // print("Board size: ${controller.board}");
+    // Size size = convertPaperSizeToScreenSize(
+    //   width: controller.board.width,
+    //   height: controller.board.height,
+    //   devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
+    // );
+    return Stack(
+      children: const [
+        _BackgroundArtboard(),
+        _ForegroundArtboard(),
+      ],
     );
   }
 }
