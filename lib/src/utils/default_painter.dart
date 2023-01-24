@@ -31,7 +31,7 @@ class SketchFactory {
       sketch.points.last.asOffset,
     );
     Paint paint = sketch.attributes.paint;
-    print("Rect: $rect");
+    // print("Rect: $rect");
     canvas.drawRect(rect, paint);
   };
 
@@ -41,7 +41,7 @@ class SketchFactory {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 20;
 
-    print("Erasing");
+    // print("Erasing");
 
     List<Offset> points = sketch.points.map((e) => e.asOffset).toList();
     if (points.isEmpty) return;

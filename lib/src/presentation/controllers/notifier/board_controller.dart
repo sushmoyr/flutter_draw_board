@@ -17,6 +17,7 @@ class BoardController extends StateNotifier<DrawBoardState> {
     double initialScale = 1.0,
     double? boardWidth,
     double? boardHeight,
+    Map<String, SketchPainter>? painters,
   }) : super(
           DrawBoardState.drawing(
             board: Board.create(
@@ -24,13 +25,20 @@ class BoardController extends StateNotifier<DrawBoardState> {
               height: boardHeight ?? 11,
             ),
             scale: initialScale,
+            painters: painters,
           ),
         );
 
   BoardController.fromDocument({
     required Board document,
     double initialScale = 1.0,
-  }) : super(DrawBoardState.drawing(board: document));
+    Map<String, SketchPainter>? painters,
+  }) : super(
+          DrawBoardState.drawing(
+            board: document,
+            painters: painters,
+          ),
+        );
 
   /// Used when the user touches the screen or clicks the mouse
   void onPointerDown(PointerDownEvent event) {

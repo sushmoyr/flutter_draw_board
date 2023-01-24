@@ -25,7 +25,7 @@ class _ForegroundArtboard extends ConsumerWidget {
               sketch: state.activeSketch,
               scale: state.scale,
               translation: state.translation,
-              // painters: state.painters,
+              painters: state.painters,
             ),
             // size: controller.board.size,
           ),
