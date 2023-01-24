@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_draw_board/flutter_draw_board.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
@@ -46,6 +48,26 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          ElevatedButton(
+            onPressed: () async {
+              final image = await controller.convertToImage();
+              final byteData =
+                  await image.toByteData(format: ImageByteFormat.png);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => Scaffold(
+                    body: Center(
+                      child: Image.memory(byteData!.buffer.asUint8List()),
+                    ),
+                  ),
+                ),
+              );
+            },
+            child: Text("Done"),
+          ),
+        ],
       ),
       body: DrawBoardWidget(
         controller: controller,

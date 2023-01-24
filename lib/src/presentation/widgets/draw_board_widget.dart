@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_draw_board/flutter_draw_board.dart';
+import 'package:flutter_draw_board/src/utils/constants.dart';
 import 'package:flutter_draw_board/src/utils/default_painter.dart';
 import 'package:flutter_draw_board/src/utils/inch_to_dpi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,11 +50,14 @@ class __DrawBoardWidgetState extends ConsumerState<_DrawBoardWidget> {
     //   height: controller.board.height,
     //   devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
     // );
-    return Stack(
-      children: const [
-        _BackgroundArtboard(),
-        _ForegroundArtboard(),
-      ],
+    return RepaintBoundary(
+      key: canvasGlobalKey,
+      child: Stack(
+        children: const [
+          _BackgroundArtboard(),
+          _ForegroundArtboard(),
+        ],
+      ),
     );
   }
 }

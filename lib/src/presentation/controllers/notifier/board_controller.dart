@@ -1,6 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
+
+import 'package:flutter/material.dart' hide Image;
+import 'package:flutter/rendering.dart';
 import 'package:flutter_draw_board/flutter_draw_board.dart';
 import 'package:flutter_draw_board/src/data/models/attributes/attributes.dart';
+import 'package:flutter_draw_board/src/utils/constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final boardControllerProvider =
@@ -242,4 +246,15 @@ class BoardController extends StateNotifier<DrawBoardState> {
   Board get board => state.board;
 
   void setScale(double scale) => state = state.copyWith(scale: scale);
+
+  Future<Image> convertToImage() async {
+    state = state.copyWith(
+      scale: 1.0,
+      translation: Offset.zero,
+    );
+    final RenderRepaintBoundary boundary = canvasGlobalKey.currentContext!
+        .findRenderObject() as RenderRepaintBoundary;
+    final image = await boundary.toImage();
+    return image;
+  }
 }
