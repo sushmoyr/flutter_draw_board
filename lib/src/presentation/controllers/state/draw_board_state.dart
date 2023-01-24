@@ -29,6 +29,7 @@ class DrawBoardState with _$DrawBoardState {
   const factory DrawBoardState.moving({
     required Board board,
     @Default(Offset.zero) Offset translation,
+    @Default(Offset.zero) Offset focalPoint,
     @Default(1.0) double scale,
     Sketch? activeSketch,
     @Default(Attributes.initial()) Attributes selectedAttributes,

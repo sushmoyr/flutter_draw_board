@@ -37,6 +37,7 @@ mixin _$DrawBoardState {
     required TResult Function(
             Board board,
             Offset translation,
+            Offset focalPoint,
             double scale,
             Sketch? activeSketch,
             Attributes selectedAttributes,
@@ -58,6 +59,7 @@ mixin _$DrawBoardState {
     TResult? Function(
             Board board,
             Offset translation,
+            Offset focalPoint,
             double scale,
             Sketch? activeSketch,
             Attributes selectedAttributes,
@@ -79,6 +81,7 @@ mixin _$DrawBoardState {
     TResult Function(
             Board board,
             Offset translation,
+            Offset focalPoint,
             double scale,
             Sketch? activeSketch,
             Attributes selectedAttributes,
@@ -377,6 +380,7 @@ class _$Drawing implements Drawing {
     required TResult Function(
             Board board,
             Offset translation,
+            Offset focalPoint,
             double scale,
             Sketch? activeSketch,
             Attributes selectedAttributes,
@@ -402,6 +406,7 @@ class _$Drawing implements Drawing {
     TResult? Function(
             Board board,
             Offset translation,
+            Offset focalPoint,
             double scale,
             Sketch? activeSketch,
             Attributes selectedAttributes,
@@ -427,6 +432,7 @@ class _$Drawing implements Drawing {
     TResult Function(
             Board board,
             Offset translation,
+            Offset focalPoint,
             double scale,
             Sketch? activeSketch,
             Attributes selectedAttributes,
@@ -512,6 +518,7 @@ abstract class _$$MovingCopyWith<$Res>
   $Res call(
       {Board board,
       Offset translation,
+      Offset focalPoint,
       double scale,
       Sketch? activeSketch,
       Attributes selectedAttributes,
@@ -537,6 +544,7 @@ class __$$MovingCopyWithImpl<$Res>
   $Res call({
     Object? board = null,
     Object? translation = null,
+    Object? focalPoint = null,
     Object? scale = null,
     Object? activeSketch = freezed,
     Object? selectedAttributes = null,
@@ -550,6 +558,10 @@ class __$$MovingCopyWithImpl<$Res>
       translation: null == translation
           ? _value.translation
           : translation // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      focalPoint: null == focalPoint
+          ? _value.focalPoint
+          : focalPoint // ignore: cast_nullable_to_non_nullable
               as Offset,
       scale: null == scale
           ? _value.scale
@@ -577,6 +589,7 @@ class _$Moving implements Moving {
   const _$Moving(
       {required this.board,
       this.translation = Offset.zero,
+      this.focalPoint = Offset.zero,
       this.scale = 1.0,
       this.activeSketch,
       this.selectedAttributes = const Attributes.initial(),
@@ -588,6 +601,9 @@ class _$Moving implements Moving {
   @override
   @JsonKey()
   final Offset translation;
+  @override
+  @JsonKey()
+  final Offset focalPoint;
   @override
   @JsonKey()
   final double scale;
@@ -608,7 +624,7 @@ class _$Moving implements Moving {
 
   @override
   String toString() {
-    return 'DrawBoardState.moving(board: $board, translation: $translation, scale: $scale, activeSketch: $activeSketch, selectedAttributes: $selectedAttributes, painters: $painters)';
+    return 'DrawBoardState.moving(board: $board, translation: $translation, focalPoint: $focalPoint, scale: $scale, activeSketch: $activeSketch, selectedAttributes: $selectedAttributes, painters: $painters)';
   }
 
   @override
@@ -619,6 +635,8 @@ class _$Moving implements Moving {
             (identical(other.board, board) || other.board == board) &&
             (identical(other.translation, translation) ||
                 other.translation == translation) &&
+            (identical(other.focalPoint, focalPoint) ||
+                other.focalPoint == focalPoint) &&
             (identical(other.scale, scale) || other.scale == scale) &&
             (identical(other.activeSketch, activeSketch) ||
                 other.activeSketch == activeSketch) &&
@@ -632,6 +650,7 @@ class _$Moving implements Moving {
       runtimeType,
       board,
       translation,
+      focalPoint,
       scale,
       activeSketch,
       selectedAttributes,
@@ -658,14 +677,15 @@ class _$Moving implements Moving {
     required TResult Function(
             Board board,
             Offset translation,
+            Offset focalPoint,
             double scale,
             Sketch? activeSketch,
             Attributes selectedAttributes,
             Map<String, void Function(Canvas, Sketch)>? painters)
         moving,
   }) {
-    return moving(
-        board, translation, scale, activeSketch, selectedAttributes, painters);
+    return moving(board, translation, focalPoint, scale, activeSketch,
+        selectedAttributes, painters);
   }
 
   @override
@@ -683,14 +703,15 @@ class _$Moving implements Moving {
     TResult? Function(
             Board board,
             Offset translation,
+            Offset focalPoint,
             double scale,
             Sketch? activeSketch,
             Attributes selectedAttributes,
             Map<String, void Function(Canvas, Sketch)>? painters)?
         moving,
   }) {
-    return moving?.call(
-        board, translation, scale, activeSketch, selectedAttributes, painters);
+    return moving?.call(board, translation, focalPoint, scale, activeSketch,
+        selectedAttributes, painters);
   }
 
   @override
@@ -708,6 +729,7 @@ class _$Moving implements Moving {
     TResult Function(
             Board board,
             Offset translation,
+            Offset focalPoint,
             double scale,
             Sketch? activeSketch,
             Attributes selectedAttributes,
@@ -716,8 +738,8 @@ class _$Moving implements Moving {
     required TResult orElse(),
   }) {
     if (moving != null) {
-      return moving(board, translation, scale, activeSketch, selectedAttributes,
-          painters);
+      return moving(board, translation, focalPoint, scale, activeSketch,
+          selectedAttributes, painters);
     }
     return orElse();
   }
@@ -758,6 +780,7 @@ abstract class Moving implements DrawBoardState {
   const factory Moving(
       {required final Board board,
       final Offset translation,
+      final Offset focalPoint,
       final double scale,
       final Sketch? activeSketch,
       final Attributes selectedAttributes,
@@ -767,6 +790,7 @@ abstract class Moving implements DrawBoardState {
   Board get board;
   @override
   Offset get translation;
+  Offset get focalPoint;
   @override
   double get scale;
   @override

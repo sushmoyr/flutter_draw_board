@@ -44,18 +44,30 @@ class BoardController extends StateNotifier<DrawBoardState> {
   /// Used when the user moves the finger across the screen or moves the mouse
   /// pointer
   void onPointerUpdate(PointerMoveEvent event) {
-    // print(state.runtimeType);
-    // if (state is Drawing && state.activeShape != null) {
-    //   Shape currentShape = state.activeShape!;
-    // print(event.localPosition);
-    // state = state.copyWith(
-    //   activeShape: currentShape..insert(event.localPosition),
-    // );
-    // }
     if (state is Drawing && state.activeSketch != null) {
-      Point point = event.localPosition.asPoint;
+      Offset position = (event.localPosition - state.translation) / state.scale;
+      Point point = position.asPoint;
       state = state.copyWith.activeSketch!(
         points: [...state.activeSketch!.points, point],
+      );
+    }
+
+    /// TODO: Add custom method to draw a shape.
+    /// The current idea is to add an abstract class with paint method and build
+    /// method signature. Paint method will add the painting process. And build
+    /// method will add the building process. May be we can use the SketchFactory
+    /// class for this.
+    /// In the build method, we will pass the active sketch and the current point
+    /// and we will receive a new Sketch which will replace the active sketch.
+    /// Doing this, we can customize the build logic like painting logic for each
+    /// sketches.
+
+    // Handle move event
+    if (state is Moving) {
+      Offset delta = event.delta;
+      Offset translation = state.translation + delta;
+      state = state.copyWith(
+        translation: translation,
       );
     }
   }
@@ -72,6 +84,66 @@ class BoardController extends StateNotifier<DrawBoardState> {
       },
       moving: (m) => m,
     );
+  }
+
+  void onScaleStart(ScaleStartDetails details) {
+    print("Scale start: $details");
+    if (state is! Moving || details.pointerCount < 2) return;
+    state = (state as Moving).copyWith(focalPoint: details.localFocalPoint);
+  }
+
+  void onScaleUpdate(ScaleUpdateDetails details) {
+    if (details.pointerCount < 2) return;
+    state = state.maybeMap(
+      moving: (s) {
+        double threshold = 0.005;
+        double scale = s.scale;
+        double initialScale = scale;
+        Offset offset = s.translation;
+        Offset focalPoint = s.focalPoint;
+        // scale = (scale * details.scale).clamp(0.5, 1.5);
+        double newScale = (scale * details.scale).clamp(0.5, 1.5);
+
+        double scaleDelta = newScale - scale;
+
+        if (scaleDelta > threshold) {
+          newScale = (scale + threshold).clamp(0.5, 1.5);
+        }
+        if (scaleDelta < threshold) {
+          newScale = (scale - threshold).clamp(0.5, 1.5);
+        }
+
+        // if (scaleDelta.abs() < threshold) {
+        //   newScale = (scale + scaleDelta).clamp(0.5, 1.5);
+        // } else {
+        //   newScale = (scale + threshold).clamp(0.5, 1.5);
+        // }
+
+        // if (newScale - scale > threshold) newScale = scale + threshold;
+        // if (scale - newScale > threshold) newScale = scale - threshold;
+        scale = newScale;
+
+        // Calculate the focal point offset
+        // if (scale != initialScale) {
+        //   offset += (focalPoint - details.localFocalPoint) * (1 - 1 / scale);
+        // }
+
+        // Calculate the new offset based on the focal point
+        // offset = details.focalPoint - (focalPointOffset / scale);
+        print('Offset: $offset ScaleDelta: $scaleDelta NewScale: $newScale');
+        return s.copyWith(
+          scale: scale,
+          // translation: offset,
+        );
+      },
+      orElse: () => state,
+    );
+  }
+
+  void onScaleEnd(ScaleEndDetails details) {
+    if (state is Moving) {
+      state = (state as Moving).copyWith(focalPoint: Offset.zero);
+    }
   }
 
   /// Selects the sketch from toolbar
@@ -93,6 +165,7 @@ class BoardController extends StateNotifier<DrawBoardState> {
 
   /// Selects the `move` state so that user can move/zoom the board
   void selectMoveMode() {
+    print('State is moving');
     state = Moving(
       board: state.board,
       translation: state.translation,

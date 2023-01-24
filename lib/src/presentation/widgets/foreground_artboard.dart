@@ -14,9 +14,19 @@ class _ForegroundArtboard extends ConsumerWidget {
       onPointerDown: controller.onPointerDown,
       onPointerUp: controller.onPointerUp,
       onPointerMove: controller.onPointerUpdate,
-      child: CustomPaint(
-        painter: ForegroundPainter(sketch: state.activeSketch),
-        child: const SizedBox.expand(),
+      child: GestureDetector(
+        onScaleStart: controller.onScaleStart,
+        onScaleUpdate: controller.onScaleUpdate,
+        onScaleEnd: controller.onScaleEnd,
+        child: CustomPaint(
+          painter: ForegroundPainter(
+            sketch: state.activeSketch,
+            scale: state.scale,
+            translation: state.translation,
+            // painters: state.painters,
+          ),
+          child: const SizedBox.expand(),
+        ),
       ),
     );
   }
@@ -25,15 +35,30 @@ class _ForegroundArtboard extends ConsumerWidget {
 class ForegroundPainter extends CustomPainter {
   final Sketch? sketch;
   final Map<String, SketchPainter>? painters;
+  final double scale;
+  final Offset translation;
 
-  ForegroundPainter({this.sketch, this.painters});
+  ForegroundPainter({
+    this.sketch,
+    this.painters,
+    this.scale = 1.0,
+    this.translation = Offset.zero,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (sketch == null) return;
-    final Map<String, SketchPainter> sketchPainters =
-        SketchFactory.overrideDefaults(painters);
-    sketchPainters[sketch!.name]?.call(canvas, sketch!);
+    print("Canvas:");
+    print("Translation: $translation");
+    print("Scale: $scale");
+    canvas.save();
+    canvas.translate(translation.dx, translation.dy);
+    canvas.scale(scale);
+    if (sketch != null) {
+      final Map<String, SketchPainter> sketchPainters =
+          SketchFactory.overrideDefaults(painters);
+      sketchPainters[sketch!.name]?.call(canvas, sketch!);
+    }
+    canvas.restore();
   }
 
   @override
