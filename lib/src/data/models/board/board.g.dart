@@ -19,7 +19,7 @@ _$_Board _$$_BoardFromJson(Map<String, dynamic> json) => _$_Board(
 Map<String, dynamic> _$$_BoardToJson(_$_Board instance) => <String, dynamic>{
       'width': instance.width,
       'height': instance.height,
-      'sketches': instance.sketches,
+      'sketches': instance.sketches.map((e) => e.toJson()).toList(),
       'runtimeType': instance.$type,
     };
 
@@ -38,6 +38,6 @@ Map<String, dynamic> _$$_InitialBoardToJson(_$_InitialBoard instance) =>
     <String, dynamic>{
       'width': instance.width,
       'height': instance.height,
-      'sketches': instance.sketches,
+      'sketches': instance.sketches.map((e) => e.toJson()).toList(),
       'runtimeType': instance.$type,
     };
