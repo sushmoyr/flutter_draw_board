@@ -8,7 +8,7 @@ class _BackgroundArtboard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(boardControllerProvider);
-    final controller = ref.read(boardControllerProvider.notifier);
+    // final controller = ref.read(boardControllerProvider.notifier);
 
     return CustomPaint(
       painter: ArtBoardPainter(state),
@@ -29,9 +29,13 @@ class ArtBoardPainter extends CustomPainter {
     // print("Canvas:");
     // print("Translation: $translation");
     // print("Scale: $scale");
+    // canvas.clipRect(rect)
     canvas.save();
+
     canvas.translate(translation.dx, translation.dy);
     canvas.scale(scale);
+    // canvas.drawRect(Offset.zero & size, Paint()..color = Colors.blue);
+    // canvas.clipRect(Offset.zero & size);
     // Rect rect = Rect.fromLTRB(0, 0, size.width, size.height);
     // canvas.clipRect(rect);
     Paint paint = Paint()..color = Colors.white;

@@ -54,6 +54,9 @@ class ForegroundPainter extends CustomPainter {
     // print("Translation: $translation");
     // print("Scale: $scale");
     canvas.save();
+    // print(size);
+    // canvas.drawRect(Offset.zero & size, Paint()..color = Colors.blue);
+    // canvas.clipRect(Offset.zero & size);
     canvas.translate(translation.dx, translation.dy);
     canvas.scale(scale);
     // Rect rect = Rect.fromLTRB(0, 0, size.width, size.height);

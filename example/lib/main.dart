@@ -46,31 +46,42 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          ElevatedButton(
-            onPressed: () async {
-              final image = await controller.convertToImage();
-              final byteData =
-                  await image.toByteData(format: ImageByteFormat.png);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => Scaffold(
-                    body: Center(
-                      child: Image.memory(byteData!.buffer.asUint8List()),
-                    ),
-                  ),
-                ),
-              );
-            },
-            child: Text("Done"),
-          ),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     final image = await controller.convertToImage();
+          //     final byteData =
+          //         await image.toByteData(format: ImageByteFormat.png);
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (_) => Scaffold(
+          //           body: Center(
+          //             child: Image.memory(byteData!.buffer.asUint8List()),
+          //           ),
+          //         ),
+          //       ),
+          //     );
+          //   },
+          //   child: Text("Done"),
+          // ),
         ],
       ),
-      body: DrawBoardWidget(
-        controller: controller,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text('Do not say'),
+            Expanded(
+              child: DrawBoardWidget(
+                controller: controller,
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: DrawingToolbar(
         controller: controller,
